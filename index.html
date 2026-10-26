@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Portal</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <style>         
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+                
+        .quiz-box {
+            background: white;
+            width: 500px;
+            max-width: 100%;    
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color:darkblue;
+        }
+
+        #question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #edeaea;
+            border-radius: 8px;
+            background: rgb(237, 235, 235);
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            background: #3452b8;
+            color:white
+        }
+        #nextBtn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #04256c;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        #nextBtn:hover {
+            background: #082471;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 24px;
+            color: #16a34a;
+            margin-top: 20px;
+        }
+        #incorrect{
+            text-align: center;
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="quiz-box">
+
+        <h1>Quiz Portal</h1>
+
+        <h2 id="question"></h2>
+
+        <div id="option"></div>
+
+        <button id="nextBtn" onclick="nextQuestion()"><span class="material-icons">&#10140;</span></button>
+
+        <h2 id="result"></h2>
+        <h2 id="incorrect"> </h2>
+
+    </div>
+
+    <script>
+
+        let questions = [
+            {
+                question: "What does HTML stand for?",
+                options: [
+                    "Hyper Text Markup Language",
+                    "High Text Machine Language",
+                    "Hyperlink Text Mark Language",
+                    "Home Tool Markup Language"
+                ],
+                answer: 0
+            },
+
+            {
+                question: "Which language is used for styling a website?",
+                options: [
+                    "HTML",
+                    "CSS",
+                    "Java",
+                    "Python"
+                ],
+                answer: 1
+            },
+
+            {
+                question: "Which language is used to make a website interactive?",
+                options: [
+                    "HTML",
+                    "CSS",
+                    "JavaScript",
+                    "SQL"
+                ],
+                answer: 2
+            },
+
+            {
+                question: "Which keyword is used to declare a variable in JavaScript?",
+                options: [
+                    "var",
+                    "int",
+                    "string",
+                    "define"
+                ],
+                answer: 0
+            },
+
+            {
+                question: "Which method is used to select an element by ID?",
+                options: [
+                    "getElementById()",
+                    "getElement()",
+                    "selectId()",
+                    "queryId()"
+                ],
+                answer: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let incorrectScore = 0;
+        let selectedAnswer = -1;
+
+        function showQuestion() {
+
+            selectedAnswer = -1;
+
+            document.getElementById("question").innerText =
+                (currentQuestion + 1) + ". " +
+                questions[currentQuestion].question;
+
+            let options = document.getElementById("option");
+
+            options.innerHTML = "";
+
+            questions[currentQuestion].options.forEach(function(option, index) {
+
+                let letters = ["A", "B", "C", "D"];
+
+                options.innerHTML += `
+                    <button class="option" onclick="selectAnswer(${index})">
+                        <b>${letters[index]}.</b> ${option}
+                    </button>
+                `;
+
+            });
+        }
+
+        function selectAnswer(index) {
+
+            selectedAnswer = index;
+
+            let buttons = document.querySelectorAll(".option");
+
+            buttons.forEach(function(button) {
+                button.style.background = "rgb(237, 235, 235)";
+                button.style.color = "black";
+
+            });
+
+            buttons[index].style.background = "black";
+            buttons[index].style.color = "white";
+
+        }
+
+        function nextQuestion() {
+
+            if (selectedAnswer === -1) {
+                alert("Please select an answer!");
+                return;
+            }
+
+            if (selectedAnswer === questions[currentQuestion].answer) {
+               score++;
+         } else {
+    incorrectScore++;
+     }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+
+                showQuestion();
+
+            } else {
+
+                document.getElementById("question").style.display = "none";
+                document.getElementById("option").style.display = "none";
+                document.getElementById("nextBtn").style.display = "none";
+
+                document.getElementById("result").innerText =
+    "Correct Answers: " + score + " / " + questions.length;
+
+               document.getElementById("incorrect").innerText =
+    "Incorrect Answers: " + incorrectScore + " / " + questions.length;
+
+            }
+        }
+
+        showQuestion();
+
+    </script>
+
+</body>
+
+</html>
+
